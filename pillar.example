@@ -1,0 +1,4 @@
+grafana:
+  datasources:
+    graphite-dc1: http://graphite-dc1.example.com
+    graphite-dc2: http://graphite-dc2.example.com
