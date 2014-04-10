@@ -1,17 +1,14 @@
-grafana:
-  git.latest:
-    - name: https://github.com/torkelo/grafana.git
-    - rev: master
-    - target: /var/www/grafana
-    - force: True
+grafana-packages:
+  pkg.latest:
+    - grafana
 
 grafana-settings:
   file.managed:
-    - name: /var/www/grafana/src/config.js
+    - name: /usr/share/grafana/config.js
     - source: salt://grafana/files/config.js
     - template: jinja
     - require:
-      - git: grafana
+      - pkg: grafana-packages
 
 grafana-favicon:
   file.managed:
