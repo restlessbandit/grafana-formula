@@ -1,6 +1,6 @@
 grafana-packages:
   pkg.latest:
-    - grafana
+    - name: grafana
 
 grafana-settings:
   file.managed:
@@ -9,9 +9,3 @@ grafana-settings:
     - template: jinja
     - require:
       - pkg: grafana-packages
-
-grafana-favicon:
-  file.managed:
-    - name: /var/www/grafana.ico
-    - source: salt://grafana/files/grafana.ico
-
