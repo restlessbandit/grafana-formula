@@ -1,6 +1,6 @@
 grafana-packages:
   pkg.latest:
-    - grafana
+    - name: grafana
 
 grafana-settings:
   file.managed:
