@@ -34,9 +34,17 @@ function (Settings) {
      */
     datasources: {
 	{% for name, url in salt['pillar.get']('grafana:datasources').items() -%}
-	'{{ name }}':            { type: 'graphite', url: '{{ url }}'},
+	'{{ name }}': { type: 'graphite', url: '{{ url }}'
+		{%- if salt['pillar.get']('grafana:datasource-default','_self') == name -%}
+		, default: true
+		{%- endif -%}
+	},
 	{% endfor -%}
-        '_self':             { type: 'graphite', url: 'https://'+window.location.hostname,  default: true }
+        '_self': { type: 'graphite', url: 'https://'+window.location.hostname
+		{%- if salt['pillar.get']('grafana:datasource-default','_self') == '_self' -%}
+		, default: true
+		{%- endif -%}
+        }
     },
 
     default_route: '/dashboard/file/default.json',
