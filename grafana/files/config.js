@@ -33,7 +33,7 @@ function (Settings) {
      *  }
      */
     datasources: {
-	{% for name, url in salt['pillar.get']('grafana:datasources').items() -%}
+	{% for name, url in salt['pillar.get']('grafana:datasources').items()|sort() -%}
 	'{{ name }}': { type: 'graphite', url: '{{ url }}'
 		{%- if salt['pillar.get']('grafana:datasource-default','_self') == name -%}
 		, default: true
