@@ -1,5 +1,8 @@
 grafana:
-  datasource-default: graphite-dc1
-  datasources:
-    graphite-dc1: http://graphite-dc1.example.com
-    graphite-dc2: http://graphite-dc2.example.com
+  elasticsearch-url: http://127.0.0.1:9200
+  graphite-url: http://127.0.0.1:9000
+  default-route: /dashboard/file/default.json
+  index-name: grafana-dash
+  panel-names:
+    - text
+    - graphite

@@ -13,7 +13,7 @@ function (Settings) {
      * elasticsearch url:
      * For Basic authentication use: http://username:password@domain.com:9200
      */
-    elasticsearch: "https://elasticlog.yandex.net:9443",
+    elasticsearch: "{{ pillar.get('grafana:elasticsearch-url', 'http://127.0.0.1:9200') }}",
 
     /**
      * graphite-web url:
@@ -22,7 +22,7 @@ function (Settings) {
      * in nginx or apache for cross origin domain sharing to work (CORS).
      * Check install documentation on github
      */
-    /* graphiteUrl: "https://"+window.location.hostname, */
+    graphiteUrl: "{{ pillar.get('grafana:graphite-url', 'http://127.0.0.1:9000') }}",
 
     /**
      * Multiple graphite servers? Comment out graphiteUrl and replace with
@@ -32,22 +32,8 @@ function (Settings) {
      *    data_center_eu: { type: 'graphite',  url: 'http://<graphite_url>' }
      *  }
      */
-    datasources: {
-	{% for name, url in salt['pillar.get']('grafana:datasources').items()|sort() -%}
-	'{{ name }}': { type: 'graphite', url: '{{ url }}'
-		{%- if salt['pillar.get']('grafana:datasource-default','_self') == name -%}
-		, default: true
-		{%- endif -%}
-	},
-	{% endfor -%}
-        '_self': { type: 'graphite', url: 'https://'+window.location.hostname
-		{%- if salt['pillar.get']('grafana:datasource-default','_self') == '_self' -%}
-		, default: true
-		{%- endif -%}
-        }
-    },
 
-    default_route: '/dashboard/file/default.json',
+    default_route: "{{ pillar.get('grafana:default-route', '/dashboard/file/default.json') }}",
 
     /**
      * If your graphite server has another timezone than you & users browsers specify the offset here
@@ -55,11 +41,21 @@ function (Settings) {
      */
     timezoneOffset: null,
 
-    grafana_index: "grafana-dash",
+    grafana_index: "{{ pillar.get('grafana:index-name', 'grafana-dash') }}",
 
+    /*
     panel_names: [
       'text',
       'graphite'
     ]
+    */
+    panel_names: [
+    {-% set panel_names = pillar.get('grafana:panel-names', ['text', 'graphite'] %-}
+    {-% if panel_names %-}
+        '{{ panel_names[0] }}'
+        {-% for name in panel_names[1:] %-}
+        , '{{ name }}'
+        {-% endfor %-}
+    {-% endif %-}
   });
 });
